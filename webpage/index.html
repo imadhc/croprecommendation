@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crop Recommendation System</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Results</a>
+    <div class="ml-auto d-flex align-items-center">
+      <a class="nav-link text-white" href="#">About Project</a>
+      <div id="login-container">
+        <button class="btn btn-outline-light ml-2" data-toggle="modal" data-target="#loginModal">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </div>
+      <div id="userDropdown" class="dropdown d-none ml-2">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdownBtn" data-toggle="dropdown">
+          User
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="logout()">Log out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Section -->
+  <!-- Main Section -->
+  <section class="recommendation-section">
+    <div class="recommended-crop">
+      🌾 Recommended Crop: <span id="crop-name">Wheat</span>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 sensor-form">
+          <label>N:</label>
+          <input class="form-control mb-3" type="text" value="90" disabled />
+          <label>P:</label>
+          <input class="form-control mb-3" type="text" value="45" disabled />
+          <label>K:</label>
+          <input class="form-control mb-3" type="text" value="65" disabled />
+        </div>
+        <div class="col-md-4 offset-md-4 sensor-form">
+          <label>Temperature:</label>
+          <input class="form-control mb-3" type="text" value="26" disabled />
+          <label>Humidity:</label>
+          <input class="form-control mb-3" type="text" value="80" disabled />
+          <label>pH:</label>
+          <input class="form-control mb-3" type="text" value="6.5" disabled />
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-4 sensor-form">
+          <label>Rainfall:</label>
+          <input class="form-control mb-3" type="text" value="150" disabled />
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-4 sensor-form-dis">
+          <label>Model Accuracy:</label>
+          <input class="form-control mb-3" type="text" value="93" disabled />
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form id="loginForm" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control mb-3" id="username" placeholder="Username" required />
+          <input type="password" class="form-control" id="password" placeholder="Password" required />
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+ 
+ 
+ 
+ <script>
+
+
+
+function updateLoginUI(role) {
+  document.getElementById('login-container').classList.add('d-none');
+  document.getElementById('userDropdown').classList.remove('d-none');
+  document.getElementById('userDropdownBtn').innerText = role;
+
+  const isAdmin = role === 'Admin';
+  const inputs = document.querySelectorAll('.sensor-form input');
+  inputs.forEach(input => input.disabled = !isAdmin);
+}
+
+function logout() {
+  localStorage.removeItem('loginRole');
+  location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const savedRole = localStorage.getItem('loginRole');
+  if (savedRole) {
+    updateLoginUI(savedRole);
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+
+  const isAdmin = username === 'admin' && password === 'admin123';
+  const isUser = username === 'user' && password === 'user123';
+
+  if (isAdmin || isUser) {
+    const role = isAdmin ? 'Admin' : 'User';
+    localStorage.setItem('loginRole', role);
+    $('#loginModal').modal('hide');
+    updateLoginUI(role);
+  } else {
+    alert('Invalid credentials');
+  }
+});
+
+
+
+
+  </script>
+</body>
+</html>
